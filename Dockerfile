@@ -10,7 +10,7 @@ RUN set -x && \
     export GNUPGHOME="$(mktemp -d)" && \
     wget "https://bitcoin.org/bin/bitcoin-core-$BITCOIN_VERSION/bitcoin-$BITCOIN_VERSION-$(uname -m)-linux-gnu.tar.gz" && \
     wget https://bitcoin.org/bin/bitcoin-core-$BITCOIN_VERSION/SHA256SUMS.asc && \
-    gpg --batch --keyserver ipv4.pool.sks-keyservers.net --recv-keys 01EA5486DE18A882D4C2684590C8019E36C2E964 && \
+    gpg --batch --keyserver keyserver.ubuntu.com --recv-keys 01EA5486DE18A882D4C2684590C8019E36C2E964 && \
     gpg --batch --verify SHA256SUMS.asc && \
     sha256sum -c SHA256SUMS.asc --ignore-missing --status && \
     tar xf bitcoin-*.tar.gz --strip-components=1
