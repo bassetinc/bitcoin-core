@@ -1,18 +1,21 @@
 FROM ubuntu:latest AS prep
 
-ENV BITCOIN_VERSION 0.20.0
+ENV BITCOIN_VERSION 25.0
 
 WORKDIR /app
 
 RUN set -x && \
     apt-get update && \
-    apt-get install -y --no-install-recommends ca-certificates gnupg wget && \
+    apt-get install -y --no-install-recommends ca-certificates gnupg wget unzip && \
     export GNUPGHOME="$(mktemp -d)" && \
-    wget "https://bitcoin.org/bin/bitcoin-core-$BITCOIN_VERSION/bitcoin-$BITCOIN_VERSION-$(uname -m)-linux-gnu.tar.gz" && \
-    wget https://bitcoin.org/bin/bitcoin-core-$BITCOIN_VERSION/SHA256SUMS.asc && \
-    gpg --batch --keyserver keyserver.ubuntu.com --recv-keys 01EA5486DE18A882D4C2684590C8019E36C2E964 && \
-    gpg --batch --verify SHA256SUMS.asc && \
-    sha256sum -c SHA256SUMS.asc --ignore-missing --status && \
+    wget "https://bitcoincore.org/bin/bitcoin-core-$BITCOIN_VERSION/bitcoin-$BITCOIN_VERSION-$(uname -m)-linux-gnu.tar.gz" && \
+    wget https://bitcoincore.org/bin/bitcoin-core-$BITCOIN_VERSION/SHA256SUMS && \
+    wget https://bitcoincore.org/bin/bitcoin-core-$BITCOIN_VERSION/SHA256SUMS.asc && \
+    wget https://github.com/bitcoin-core/guix.sigs/archive/refs/heads/main.zip && \
+    unzip main.zip && \
+    gpg --import guix.sigs-main/builder-keys/*.gpg && \
+    gpg --batch --verify SHA256SUMS.asc SHA256SUMS && \
+    sha256sum -c SHA256SUMS --ignore-missing --status && \
     tar xf bitcoin-*.tar.gz --strip-components=1
 
 ########
