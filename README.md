@@ -5,6 +5,12 @@
 docker build --rm -t bitcoin .
 ```
 
+For building an amd64 linux image on Apple Silicon
+
+```
+docker build --plaltform linux/amd64 --rm -t bitcoin .
+```
+
 ## Running node
 Bitcoin Core typically requires more than 350GB of storage with fully synchronized blockchain. You should bind a volume or any host directory to the container to keep the blockchain external to the container.
 ```
